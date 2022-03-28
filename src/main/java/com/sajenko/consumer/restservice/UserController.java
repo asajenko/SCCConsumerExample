@@ -1,9 +1,6 @@
 package com.sajenko.consumer.restservice;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -34,14 +31,13 @@ public class UserController {
     }
 
     @GetMapping("/employers/{id}")
-    public User getUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         RestTemplate rest = new RestTemplate();
         rest.setMessageConverters(Collections.singletonList(converter));
-        ResponseEntity<User> exchange = rest.getForEntity(
+        return rest.getForEntity(
                 "http://localhost:" + port + "/users/" + id,
                 User.class);
-        return exchange.getBody();
     }
 }
